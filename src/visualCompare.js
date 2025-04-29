@@ -7,17 +7,20 @@ const path = require('path');
 const fs = require('fs');
 
 class VisualCompare {
-    constructor(url1) {
+    constructor(url1, options = {}) {
         this.url1 = url1;
         this.label = 'diff';
         this.actions = new ActionHandler();
         this.viewport = { width: 1280, height: 800 };
         this.threshold = 0;
-        this.outputDir = path.resolve(__dirname, '../screenshots');
+        this.outputDir = options.outputDir || path.resolve(process.cwd(), 'screenshots');
+        this.clearOutputDir = options.clearOutputDir ?? true;
 
-        if (!fs.existsSync(this.outputDir)) {
-            fs.mkdirSync(this.outputDir, { recursive: true });
+        if (this.clearOutputDir && fs.existsSync(this.outputDir)) {
+            fs.rmSync(this.outputDir, { recursive: true, force: true });
         }
+
+        fs.mkdirSync(this.outputDir, { recursive: true });
 
         this.browser = new PuppeteerBrowser();
     }
@@ -73,13 +76,13 @@ class VisualCompare {
 
     async _setupPages() {
         await this.browser.launch();
-            const page1 = await this.browser.goto(this.url1);
-            const page2 = await this.browser.goto(this.url2);
+        const page1 = await this.browser.goto(this.url1);
+        const page2 = await this.browser.goto(this.url2);
 
-            await this.actions.performActions(page1);
-            await this.actions.performActions(page2);
+        await this.actions.performActions(page1);
+        await this.actions.performActions(page2);
 
-            return [page1, page2];
+        return [page1, page2];
     }
 
     async close() {
