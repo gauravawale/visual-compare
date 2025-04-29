@@ -1,21 +1,24 @@
 {
   "name": "visual-compare",
   "version": "1.0.0",
-  "description": "",
+  "description": "Visual regression testing tool for comparing two URLs of the same app by capturing screenshots, performing pixel-by-pixel image comparisons, and highlighting visual differences. Ideal for detecting UI changes after deployments or updates.",
   "main": "src/index.js",
   "scripts": {
     "test": "jest",
     "prepare": "mkdir -p screenshots"
   },
   "keywords": [
-    "visual-regression",
-    "testing",
-    "puppeteer",
+    "visual-testing",
+    "ui-regression",
+    "visual-compare",
     "pixelmatch",
-    "ui-testing"
+    "puppeteer",
+    "screenshot-testing",
+    "regression-testing",
+    "headless-browser",
+    "image-diff"
   ],
   "author": "Gaurav Awale",
-  "license": "ISC",
   "dependencies": {
     "pixelmatch": "5.2.1",
     "pngjs": "^7.0.0",
@@ -23,5 +26,6 @@
   },
   "devDependencies": {
     "jest": "^29.7.0"
-  }
+  },
+  "license": "MIT"
 }
