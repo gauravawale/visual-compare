@@ -1,6 +1,6 @@
-# Visual Compare
+# Visual Diff Tool
 
-Visual Compare is a simple Node.js utility to **capture screenshots of two web pages**, **compare them pixel-by-pixel**, and **detect visual differences**.
+Visual Diff Tool is a simple Node.js utility to **capture screenshots of two web pages**, **compare them pixel-by-pixel**, and **detect visual differences**.
 
 Built using **Puppeteer** and **Pixelmatch**.
 
@@ -21,7 +21,7 @@ Good for **UI regression testing** and **visual validation** during your develop
 ## 🚀 Installation
 
 ```bash
-npm install visual-compare
+npm install visual-diff-tool
 ```
 
 ---
@@ -29,7 +29,7 @@ npm install visual-compare
 ## 📸 Basic Usage
 
 ```javascript
-const visualCompare = require('visual-compare');
+const visualCompare = require('visual-diff-tool');
 
 visualCompare('https://example.com')
     .and('https://example.org')
