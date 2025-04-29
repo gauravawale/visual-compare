@@ -1,6 +1,6 @@
 {
   "name": "visual-diff-tool",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Visual regression testing tool for comparing two URLs of the same app by capturing screenshots, performing pixel-by-pixel image comparisons, and highlighting visual differences. Ideal for detecting UI changes after deployments or updates.",
   "main": "src/index.js",
   "scripts": {
