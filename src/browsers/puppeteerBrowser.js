@@ -10,14 +10,16 @@ class PuppeteerBrowser extends HeadlessBrowser {
 
     async launch() {
         this.browser = await puppeteer.launch({
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            protocolTimeout: 300000
         });
         return this.browser;
     }
 
     async goto(url) {
         const page = await this.browser.newPage();
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+        await page.waitForTimeout(2000);
         return page;
     }
 
