@@ -79,6 +79,9 @@ class VisualCompare {
         const page1 = await this.browser.goto(this.url1);
         const page2 = await this.browser.goto(this.url2);
 
+        await this.browser.setViewport(page1, this.viewport.width, this.viewport.height);
+        await this.browser.setViewport(page2, this.viewport.width, this.viewport.height);
+
         await this.actions.performActions(page1);
         await this.actions.performActions(page2);
 

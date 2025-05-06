@@ -10,20 +10,27 @@ class PuppeteerBrowser extends HeadlessBrowser {
 
     async launch() {
         this.browser = await puppeteer.launch({
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            protocolTimeout: 300000
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--disable-software-rasterizer',
+                '--disable-extensions',
+                '--disable-background-networking',
+                '--disable-sync',
+                '--metrics-recording-only'
+            ],
+            protocolTimeout: 300000,
+            headless: true,
         });
         return this.browser;
     }
 
     async goto(url) {
         const page = await this.browser.newPage();
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
         return page;
-    }
-
-    async screenshot(page, path, fullPage) {
-        await page.screenshot({ path, fullPage });
     }
 
     async setViewport(page, width, height) {

@@ -8,7 +8,9 @@ class ScreenshotComparison {
     static async captureScreenshot(page, outputDir, label, suffix) {
         const timestamp = Date.now();
         const imgPath = path.join(outputDir, `${label}-${suffix}-${timestamp}.png`);
+        console.log(suffix + ' taking screenshot');
         await page.screenshot({ path: imgPath, fullPage: true });
+        console.log(suffix + ' taking screenshot done');
         return imgPath;
     }
 
