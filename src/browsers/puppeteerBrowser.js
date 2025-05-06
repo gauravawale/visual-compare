@@ -19,10 +19,15 @@ class PuppeteerBrowser extends HeadlessBrowser {
                 '--disable-extensions',
                 '--disable-background-networking',
                 '--disable-sync',
-                '--metrics-recording-only'
+                '--metrics-recording-only',
+                '--window-size=1280,720'
             ],
+            defaultViewport: {
+                width: 1280,
+                height: 720
+            },
             protocolTimeout: 300000,
-            headless: true,
+            headless: false,
         });
         return this.browser;
     }
