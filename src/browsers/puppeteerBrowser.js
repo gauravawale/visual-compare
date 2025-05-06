@@ -19,7 +19,6 @@ class PuppeteerBrowser extends HeadlessBrowser {
     async goto(url) {
         const page = await this.browser.newPage();
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
-        await page.waitForTimeout(2000);
         return page;
     }
 
