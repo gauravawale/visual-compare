@@ -9,7 +9,9 @@ class ScreenshotComparison {
         const timestamp = Date.now();
         const imgPath = path.join(outputDir, `${label}-${suffix}-${timestamp}.png`);
         console.log(suffix + ' taking screenshot');
-        await page.screenshot({ path: imgPath, fullPage: true });
+        await page.waitForSelector('body', { visible: true });
+        console.log('waiting done!');
+        await page.screenshot({ path: imgPath, fullPage: false }).catch(err => console.error('Screenshot failed:', err));
         console.log(suffix + ' taking screenshot done');
         return imgPath;
     }
