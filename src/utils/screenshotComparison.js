@@ -13,8 +13,10 @@ class ScreenshotComparison {
                 const imgPath = path.join(outputDir, `${label}-${suffix}-${timestamp}.png`);
                 console.log(suffix + ' taking screenshot');
                 await new Promise(resolve => setTimeout(resolve, 5000));
+                console.log('timeout done!');
+                await page.waitForSelector('body', { visible: true, timeout: 5000 });
                 console.log('waiting done!');
-                await page.screenshot({ path: imgPath, fullPage: false });
+                await page.screenshot({ path: imgPath, fullPage: true });
                 console.log(suffix + ' taking screenshot done');
                 return imgPath;
             } catch (err) {
