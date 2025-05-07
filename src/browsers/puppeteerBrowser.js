@@ -26,7 +26,7 @@ class PuppeteerBrowser extends HeadlessBrowser {
                 width: 1280,
                 height: 720
             },
-            protocolTimeout: 300000,
+            protocolTimeout: 60000,
             headless: true
         });
         return this.browser;
