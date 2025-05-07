@@ -26,7 +26,7 @@ class PuppeteerBrowser extends HeadlessBrowser {
                 width: 1280,
                 height: 720
             },
-            protocolTimeout: 60000,
+            protocolTimeout: 120000,
             headless: true
         });
         return this.browser;
@@ -34,7 +34,7 @@ class PuppeteerBrowser extends HeadlessBrowser {
 
     async goto(url) {
         const page = await this.browser.newPage();
-        await page.goto(url, { waitUntil: 'networkidle0', timeout: 120000 });
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 120000 });
         return page;
     }
 
