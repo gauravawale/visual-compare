@@ -16,8 +16,6 @@ class VisualCompare {
         this.outputDir = options.outputDir || path.resolve(process.cwd(), 'screenshots');
         this.clearOutputDir = options.clearOutputDir ?? true;
 
-        fs.mkdirSync(this.outputDir, { recursive: true });
-
         this.browser = new PuppeteerBrowser();
     }
 
