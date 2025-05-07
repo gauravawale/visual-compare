@@ -17,7 +17,7 @@ class VisualCompare {
         this.clearOutputDir = options.clearOutputDir ?? true;
 
         console.log('--------------------------------');
-        console.log(outputDir);
+        console.log(this.outputDir);
 
         fs.mkdirSync(this.outputDir, { recursive: true });
 
