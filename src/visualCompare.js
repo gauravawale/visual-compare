@@ -65,8 +65,9 @@ class VisualCompare {
         await autoScroll(page1);
         await autoScroll(page2);
 
-        const imgPath1 = await ScreenshotComparison.captureScreenshot(page1, this.outputDir, this.label, 'screen1');
+        const imgPathDummy = await ScreenshotComparison.captureScreenshot(page1, this.outputDir, this.label, 'screen-dummy');
         const imgPath2 = await ScreenshotComparison.captureScreenshot(page2, this.outputDir, this.label, 'screen2');
+        const imgPath1 = await ScreenshotComparison.captureScreenshot(page1, this.outputDir, this.label, 'screen1');
         const result = await ScreenshotComparison.compareScreenshots(imgPath1, imgPath2, this.label, this.threshold);
         await this.close();
         return result;
