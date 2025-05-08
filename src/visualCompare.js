@@ -77,7 +77,7 @@ class VisualCompare {
 
     async _setupPage() {
         await this.browser.launch();
-        const page = page.goto(this.url1).catch(err => console.error('goto failed:', err));
+        const page = this.browser.goto(this.url1).catch(err => console.error('goto failed:', err));
 
         await this.browser.setViewport(page, this.viewport.width, this.viewport.height);
 
