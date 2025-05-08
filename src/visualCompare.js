@@ -60,32 +60,31 @@ class VisualCompare {
     }
 
     async compare() {
-        const [page1, page2] = await this._setupPages();
-
+        const page1 = await this._setupPage(this.url1);
         await autoScroll(page1);
-        await autoScroll(page2);
-
-        const imgPathDummy = await ScreenshotComparison.captureScreenshot(page1, this.outputDir, this.label, 'screen-dummy');
-        const imgPath2 = await ScreenshotComparison.captureScreenshot(page2, this.outputDir, this.label, 'screen2');
         const imgPath1 = await ScreenshotComparison.captureScreenshot(page1, this.outputDir, this.label, 'screen1');
-        const result = await ScreenshotComparison.compareScreenshots(imgPath1, imgPath2, this.label, this.threshold);
         await this.close();
+
+        const page2 = await this._setupPage(this.url2);
+        await autoScroll(page2);
+        const imgPath2 = await ScreenshotComparison.captureScreenshot(page2, this.outputDir, this.label, 'screen2');
+        await this.close();
+
+        return await ScreenshotComparison.compareScreenshots(imgPath1, imgPath2, this.label, this.threshold);
         return result;
 
     }
 
-    async _setupPages() {
+    async _setupPage() {
         await this.browser.launch();
-        const page1 = await this.browser.goto(this.url1).catch(err => console.error('goto failed 1:', err));
-        const page2 = await this.browser.goto(this.url2).catch(err => console.error('goto failed 2:', err));
+        const page = await this.browser.newPage();
+        await page.goto(this.url1).catch(err => console.error('goto failed:', err));
 
-        await this.browser.setViewport(page1, this.viewport.width, this.viewport.height);
-        await this.browser.setViewport(page2, this.viewport.width, this.viewport.height);
+        await this.browser.setViewport(page, this.viewport.width, this.viewport.height);
 
-        await this.actions.performActions(page1);
-        await this.actions.performActions(page2);
+        await this.actions.performActions(page);
 
-        return [page1, page2];
+        return page1;
     }
 
     async close() {
