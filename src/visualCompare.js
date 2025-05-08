@@ -63,27 +63,26 @@ class VisualCompare {
         const page1 = await this._setupPage(this.url1);
         await autoScroll(page1);
         const imgPath1 = await ScreenshotComparison.captureScreenshot(page1, this.outputDir, this.label, 'screen1');
-        await this.close();
 
         const page2 = await this._setupPage(this.url2);
         await autoScroll(page2);
         const imgPath2 = await ScreenshotComparison.captureScreenshot(page2, this.outputDir, this.label, 'screen2');
-        await this.close();
 
-        return await ScreenshotComparison.compareScreenshots(imgPath1, imgPath2, this.label, this.threshold);
-        return result;
+        const result = await ScreenshotComparison.compareScreenshots(imgPath1, imgPath2, this.label, this.threshold);
+        await this.close();
+        return page2;
 
     }
 
-    async _setupPage() {
+    async _setupPage(url) {
         await this.browser.launch();
-        const page = this.browser.goto(this.url1).catch(err => console.error('goto failed:', err));
+        const page = await this.browser.goto(url).catch(err => console.error('goto failed', err));
 
         await this.browser.setViewport(page, this.viewport.width, this.viewport.height);
 
         await this.actions.performActions(page);
 
-        return page1;
+        return page;
     }
 
     async close() {
