@@ -70,7 +70,7 @@ class VisualCompare {
 
         const result = await ScreenshotComparison.compareScreenshots(imgPath1, imgPath2, this.label, this.threshold);
         await this.close();
-        return page2;
+        return result;
 
     }
 

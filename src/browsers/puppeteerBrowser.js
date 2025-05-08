@@ -1,88 +1,46 @@
-// visualCompare.js
-const PuppeteerBrowser = require('./browsers/puppeteerBrowser');
-const ActionHandler = require('./actions/actionHandler');
-const ScreenshotComparison = require('./utils/screenshotComparison');
-const autoScroll = require('./utils/autoScroll');
-const path = require('path');
-const fs = require('fs');
+// puppeteerBrowser.js
+const puppeteer = require('puppeteer');
+const HeadlessBrowser = require('./headlessBrowser');
 
-class VisualCompare {
-    constructor(url1, options = {}) {
-        this.url1 = url1;
-        this.label = 'diff';
-        this.actions = new ActionHandler();
-        this.viewport = { width: 1280, height: 800 };
-        this.threshold = 0;
-        this.outputDir = options.outputDir || path.resolve(process.cwd(), 'screenshots');
-        this.clearOutputDir = options.clearOutputDir ?? true;
-
-        console.log('--------------------------------');
-        console.log(this.outputDir);
-
-        fs.mkdirSync(this.outputDir, { recursive: true });
-
-        this.browser = new PuppeteerBrowser();
+class PuppeteerBrowser extends HeadlessBrowser {
+    constructor() {
+        super();
+        this.browser = null;
     }
 
-    setThreshold(value) {
-        this.threshold = value;
-        return this;
+    async launch() {
+        this.browser = await puppeteer.launch({
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--disable-software-rasterizer',
+                '--disable-extensions',
+                '--disable-background-networking',
+                '--disable-sync',
+                '--metrics-recording-only',
+                '--window-size=1280,720'
+            ],
+            defaultViewport: {
+                width: 1280,
+                height: 720
+            },
+            protocolTimeout: 120000,
+            headless: true
+        });
+        return this.browser;
     }
 
-    and(url2) {
-        this.url2 = url2;
-        return this;
-    }
-
-    click(selector) {
-        this.actions.addAction({ type: 'click', selector });
-        return this;
-    }
-
-    type(selector, text) {
-        this.actions.addAction({ type: 'type', selector, text });
-        return this;
-    }
-
-    waitForSelector(selector, options = {}) {
-        this.actions.addAction({ type: 'waitForSelector', selector, options });
-        return this;
-    }
-
-    setViewport(width, height) {
-        this.viewport = { width, height };
-        return this;
-    }
-
-    setLabel(label) {
-        this.label = label;
-        return this;
-    }
-
-    async compare() {
-        const page1 = await this._setupPage(this.url1);
-        await autoScroll(page1);
-        const imgPath1 = await ScreenshotComparison.captureScreenshot(page1, this.outputDir, this.label, 'screen1');
-
-        const page2 = await this._setupPage(this.url2);
-        await autoScroll(page2);
-        const imgPath2 = await ScreenshotComparison.captureScreenshot(page2, this.outputDir, this.label, 'screen2');
-
-        const result = await ScreenshotComparison.compareScreenshots(imgPath1, imgPath2, this.label, this.threshold);
-        await this.close();
-        return result;
-
-    }
-
-    async _setupPage(url) {
-        await this.browser.launch();
-        const page = await this.browser.goto(url).catch(err => console.error('goto failed', err));
-
-        await this.browser.setViewport(page, this.viewport.width, this.viewport.height);
-
-        await this.actions.performActions(page);
-
+    async goto(url) {
+        const page = await this.browser.newPage();
+        await page.goto(url, { waitUntil: 'networkidle0', timeout: 120000 });
+        console.log('------- Go to successful');
         return page;
+    }
+
+    async setViewport(page, width, height) {
+        await page.setViewport({ width, height });
     }
 
     async close() {
@@ -90,4 +48,4 @@ class VisualCompare {
     }
 }
 
-module.exports = VisualCompare;
+module.exports = PuppeteerBrowser;
